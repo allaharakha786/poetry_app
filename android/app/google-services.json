@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "78771136521",
+    "project_id": "wave-app-51dc8",
+    "storage_bucket": "wave-app-51dc8.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:78771136521:android:3456b76cd53766386170d8",
+        "android_client_info": {
+          "package_name": "com.example.google_"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAf2RNPmeVghzIqCk_xuMHX6gP6pBgniU4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:78771136521:android:eef7f1c350efac7e6170d8",
+        "android_client_info": {
+          "package_name": "com.example.google_maps"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAf2RNPmeVghzIqCk_xuMHX6gP6pBgniU4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
