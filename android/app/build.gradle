@@ -11,8 +11,6 @@ plugins {
 android {
     namespace = "com.example.google_maps"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
-
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8

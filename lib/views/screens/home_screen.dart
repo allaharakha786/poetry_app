@@ -1,435 +1,498 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:google_maps/controllers/utills/shared_preferences.dart';
+import 'package:google_maps/controllers/getxControllers/poetry_controller.dart';
+import 'package:google_maps/controllers/utills/app_colors.dart';
+import 'package:google_maps/controllers/utills/app_textStyles.dart';
+import 'package:google_maps/controllers/utills/data_list.dart';
 import 'package:google_maps/views/screens/poetry_screen.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:google_maps/views/widgets/common_widgets.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
+// ignore: must_be_immutable
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  bool isOffline;
+  HomeScreen({super.key, required this.isOffline});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  void shareToWhatsApp(String text) async {
-    final encodedText = Uri.encodeComponent(text);
-    final whatsappUrl = "whatsapp://send?text=$encodedText";
-
-    if (await canLaunchUrl(Uri.parse(whatsappUrl))) {
-      await launchUrl(Uri.parse(whatsappUrl));
-    } else {}
-  }
-
-  List<String> catagoryImages = ['assets/images/sad_background.jpg', 'assets/images/love_background.jpg', 'assets/images/funny_background.png'];
-  List<String> poets = [
-    "مرزا غالب",
-    "شاکر شجاع آبادی",
-    "بلھے شاہ",
-    'احمد فراز',
-    "سچل سرمست",
-    "جون ایلیا",
-    "خواجہ فرید",
-    'پروین شاکر',
-    'امجد اسلام امجد',
-    "رحمان بابا",
-    "وارث شاہ",
-    "فراق گورکھپوری",
-    "علامہ محمد اقبال",
-    "شہید بھگت",
-    "جوش ملیح آبادی",
-    "ساحر لدھیانوی",
-    "رفیق خاور",
-    "حسرت موہانی",
-    "میر تقی میر",
-  ];
-  List<String> poetImages = [
-    'assets/images/mirza_ghalib_image.jpg',
-    'assets/images/shakir_shuja_abadi.jpg',
-    'assets/images/Bulleh_Shah_image.jpg',
-    'assets/images/ahmad_fraz_image.jpg',
-    'assets/images/sachal_sarmast_image.png',
-    'assets/images/john_alya_image.jpg',
-    'assets/images/khawja_fareed_image.jpg',
-    'assets/images/parveen_shakir_image.jpg',
-    'assets/images/amjad_islam_image.jpg',
-    'assets/images/rehman_baba_image.jpg',
-    'assets/images/waris_shah_image.png',
-    'assets/images/fraq_gorpori_image.png',
-    'assets/images/alama_iqbal_image.jpg',
-    'assets/images/shaheed_bhagat.jpg',
-    'assets/images/josh_abadi.jpg',
-    'assets/images/sahir_lodhanvi_image.jpg',
-    'assets/images/rafeeq_khawar_image.jpg',
-    'assets/images/hasrat mohani.png',
-    'assets/images/mir_taqi_mir_image.jpg',
-  ];
-  List<String> midImages = ['assets/images/sad_image.jpg', 'assets/images/love_mid_image.jpg', 'assets/images/funny_mid_image.png'];
-  List<String> languageFlag = [
-    'assets/images/urdu_language.jpg',
-    'assets/images/punjabi_language.jpg',
-    'assets/images/saraiki_image.jpg',
-    'assets/images/sindhi_language.jpg',
-    'assets/images/pashtoo_language.jpg',
-    'assets/images/blochi_language.jpg',
-    'assets/images/kashmari_language.png',
-    'assets/images/pharsi_language.jpg',
-  ];
-  List<String> picsList = [
-    'assets/images/sad_icon.png',
-    'assets/images/love_icon.png',
-    'assets/images/funny_icon.png',
-  ];
-  List<String> languageList = ["اردو", "پنجابی", "سرائیکی", "سندھی", "پشتو", "بلوچی", "کشمیری", "فارسی"];
-
-  List<String> title = ['😥 اداس شاعری', '💖 محبت کی شاعری', '😂 مزاحیہ شاعری'];
-  FlutterTts flutterTts = FlutterTts();
+  PoetryController poetryController = Get.put(PoetryController());
   @override
   void initState() {
     super.initState();
   }
 
-  Future<void> speak(String text) async {
-    await flutterTts.setLanguage('ur');
-    await flutterTts.setSpeechRate(0.2);
-    await flutterTts.setVolume(1.0);
-    await flutterTts.speak(text);
-  }
-
-  List data = MySharedPreferences.getStringList('myList');
-
   @override
   Widget build(BuildContext context) {
-    print(data);
+    print(poetryController.data);
     Size mediaQuerySize = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          iconTheme: const IconThemeData(color: Colors.black),
-          centerTitle: true,
-          backgroundColor: Colors.black12,
-          title: const Text(
-            'Home Screen',
-            style: TextStyle(color: Colors.black),
-          ),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: 8.0),
-              child: Stack(
-                children: [
-                  const Icon(
-                    Icons.favorite,
-                    color: Colors.redAccent,
-                  ),
-                  Positioned(
-                      left: mediaQuerySize.height * 0.012.w,
-                      top: mediaQuerySize.height * 0.0045.h,
-                      child: Text(
-                        data.length.toString(),
-                        style: TextStyle(fontSize: 10, color: Colors.yellow),
-                      )),
-                ],
-              ),
-            )
-          ],
-        ),
-        drawer: const Drawer(
-          backgroundColor: Colors.black,
-          child: Text('sad'),
-        ),
         body: Container(
           height: mediaQuerySize.height.h,
           width: mediaQuerySize.width.w,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 12),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  CarouselSlider.builder(
-                    itemCount: 3,
-                    itemBuilder: (BuildContext context, int index, int realIndex) {
-                      return GestureDetector(
-                        onTap: () {
-                          index == 0
-                              ? Get.to(() => PoetryScreen(
-                                    name: '',
-                                    isSadPoetry: true,
-                                  ))
-                              : index == 1
-                                  ? Get.to(() => PoetryScreen(
-                                        name: '',
-                                        isLovePoetry: true,
-                                      ))
-                                  : Get.to(() => PoetryScreen(
-                                        name: '',
-                                        isFunnyPoetry: true,
-                                      ));
-
-                          print('tapped index===$index');
-                        },
-                        child: Container(
-                          width: mediaQuerySize.width.w,
-                          height: mediaQuerySize.height * 0.4.h,
-                          // margin: EdgeInsets.symmetric(horizontal: 0),
-                          decoration: BoxDecoration(image: const DecorationImage(fit: BoxFit.cover, image: AssetImage('assets/images/background.jpg')), borderRadius: BorderRadius.circular(12)),
-                          child: Container(
-                            width: mediaQuerySize.width.w,
-                            height: mediaQuerySize.height * 0.4.h,
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: AssetImage(
-                                      midImages[index],
-                                    )),
-                                borderRadius: BorderRadius.circular(12)),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [AppColors.lightBlueColor, AppColors.dartBlue],
+            ),
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Container(
+                    height: mediaQuerySize.height * 0.075.h,
+                    width: mediaQuerySize.width.w,
+                    decoration: BoxDecoration(color: AppColors.blackColor12, borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10.sp), bottomRight: Radius.circular(10.sp))),
+                    child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: mediaQuerySize.width * 0.02.w),
+                        child: Row(children: [
+                          Expanded(
+                            child: Center(
+                              child: Text(widget.isOffline ? 'Offline Poetry' : 'Online Poetry', style: AppTextstyles.appBarTextStyle()),
+                            ),
+                          ),
+                          Obx(() {
+                            return CommonWidgets.commonFavoriteIcon(
+                              poetryController.data.length,
+                              () {
+                                Get.to(
+                                    transition: Transition.upToDown,
+                                    duration: Duration(milliseconds: 500),
+                                    () => PoetryScreen(
+                                          name: '',
+                                          isFavorite: true,
+                                        ));
+                              },
+                            );
+                          }),
+                        ]))),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: mediaQuerySize.width * 0.02.w, vertical: mediaQuerySize.height * 0.015.h),
+                  child: Column(
+                    children: [
+                      CarouselSlider.builder(
+                        itemCount: 3,
+                        itemBuilder: (BuildContext context, int index, int realIndex) {
+                          return GestureDetector(
+                            onTap: () {
+                              index == 0
+                                  ? Get.to(
+                                      transition: Transition.fade,
+                                      duration: Duration(milliseconds: 500),
+                                      () => PoetryScreen(
+                                            isOffline: widget.isOffline,
+                                            name: '',
+                                            isSadPoetry: true,
+                                          ))
+                                  : index == 1
+                                      ? Get.to(
+                                          transition: Transition.fade,
+                                          duration: Duration(milliseconds: 500),
+                                          () => PoetryScreen(
+                                                isOffline: widget.isOffline,
+                                                name: '',
+                                                isLovePoetry: true,
+                                              ))
+                                      : Get.to(
+                                          transition: Transition.fade,
+                                          duration: Duration(milliseconds: 500),
+                                          () => PoetryScreen(
+                                                isOffline: widget.isOffline,
+                                                name: '',
+                                                isFunnyPoetry: true,
+                                              ));
+                            },
                             child: Container(
                               width: mediaQuerySize.width.w,
                               height: mediaQuerySize.height * 0.4.h,
-                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: Colors.black.withOpacity(0.675)),
-                              child: Align(
-                                alignment: Alignment.center,
-                                child: Text(
-                                  title[index],
-                                  style: TextStyle(fontFamily: 'boldFont', color: Colors.white, fontSize: mediaQuerySize.width * 0.07.w),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                    options: CarouselOptions(
-                      height: mediaQuerySize.height * 0.3.h,
-                      enlargeCenterPage: true,
-                      enableInfiniteScroll: true,
-                      initialPage: 0,
-                      autoPlay: true,
-                      autoPlayInterval: const Duration(seconds: 3),
-                      autoPlayAnimationDuration: const Duration(milliseconds: 800),
-                      scrollPhysics: const BouncingScrollPhysics(),
-                    ),
-                  ),
-                  SizedBox(height: mediaQuerySize.height * 0.025.h),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Text(
-                      'بہترین شعراء',
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                    ),
-                  ),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: List.generate(
-                        poets.length,
-                        (index) {
-                          return Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: GestureDetector(
-                              onTap: () {
-                                index == 0
-                                    ? Get.to(() => PoetryScreen(
-                                          name: '',
-                                          isMirzaGhalibPoetry: true,
-                                        ))
-                                    : index == 1
-                                        ? Get.to(() => PoetryScreen(
-                                              name: '',
-                                              isShakirShujabadiPoetry: true,
-                                            ))
-                                        : index == 2
-                                            ? Get.to(() => PoetryScreen(
-                                                  name: '',
-                                                  isBollayShahPoetry: true,
-                                                ))
-                                            : index == 2
-                                                ? Get.to(() => PoetryScreen(
-                                                      name: '',
-                                                      isBollayShahPoetry: true,
-                                                    ))
-                                                : index == 3
-                                                    ? Get.to(() => PoetryScreen(
-                                                          name: '',
-                                                          isAhmadFrazPoetry: true,
-                                                        ))
-                                                    : index == 4
-                                                        ? Get.to(() => PoetryScreen(
-                                                              name: '',
-                                                              isSachalSarmastPoetry: true,
-                                                            ))
-                                                        : index == 5
-                                                            ? Get.to(() => PoetryScreen(
-                                                                  name: '',
-                                                                  isJhonEliaPoetry: true,
-                                                                ))
-                                                            : index == 6
-                                                                ? Get.to(() => PoetryScreen(
-                                                                      name: '',
-                                                                      isKhawajaFareedPoetry: true,
-                                                                    ))
-                                                                : index == 7
-                                                                    ? Get.to(() => PoetryScreen(
-                                                                          name: '',
-                                                                          isParveenShakirPoetry: true,
-                                                                        ))
-                                                                    : index == 8
-                                                                        ? Get.to(() => PoetryScreen(
-                                                                              name: '',
-                                                                              isAmjadIslamPoetry: true,
-                                                                            ))
-                                                                        : index == 9
-                                                                            ? Get.to(() => PoetryScreen(
-                                                                                  name: '',
-                                                                                  isRehmanBabaPoetry: true,
-                                                                                ))
-                                                                            : index == 10
-                                                                                ? Get.to(() => PoetryScreen(
-                                                                                      name: '',
-                                                                                      isWarisShahPoetry: true,
-                                                                                    ))
-                                                                                : index == 11
-                                                                                    ? Get.to(() => PoetryScreen(
-                                                                                          name: '',
-                                                                                          isGorakpuriPoetry: true,
-                                                                                        ))
-                                                                                    : index == 12
-                                                                                        ? Get.to(() => PoetryScreen(
-                                                                                              name: '',
-                                                                                              isAllamaIqbalPoetry: true,
-                                                                                            ))
-                                                                                        : index == 13
-                                                                                            ? Get.to(() => PoetryScreen(
-                                                                                                  name: '',
-                                                                                                  isShaheedBhagatPoetry: true,
-                                                                                                ))
-                                                                                            : index == 14
-                                                                                                ? Get.to(() => PoetryScreen(
-                                                                                                      name: '',
-                                                                                                      isJoshAbadiPoetry: true,
-                                                                                                    ))
-                                                                                                : index == 15
-                                                                                                    ? Get.to(() => PoetryScreen(
-                                                                                                          name: '',
-                                                                                                          isSeharLodhanviPoetry: true,
-                                                                                                        ))
-                                                                                                    : index == 16
-                                                                                                        ? Get.to(() => PoetryScreen(
-                                                                                                              name: '',
-                                                                                                              isRafiqKhawarPoetry: true,
-                                                                                                            ))
-                                                                                                        : index == 17
-                                                                                                            ? Get.to(() => PoetryScreen(
-                                                                                                                  name: '',
-                                                                                                                  isHasratMohaniPoetry: true,
-                                                                                                                ))
-                                                                                                            : index == 18
-                                                                                                                ? Get.to(() => PoetryScreen(
-                                                                                                                      name: '',
-                                                                                                                      isMirTakiMirPoetry: true,
-                                                                                                                    ))
-                                                                                                                : '';
-                              },
-                              child: Column(
-                                children: [
-                                  Container(
-                                    height: mediaQuerySize.height * 0.1.h,
-                                    width: mediaQuerySize.width * 0.17.w,
-                                    decoration: BoxDecoration(image: DecorationImage(fit: BoxFit.cover, image: AssetImage(poetImages[index])), color: Colors.amber, shape: BoxShape.circle),
+                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(12.sp), boxShadow: [BoxShadow(color: AppColors.blackColor12, spreadRadius: 0.2, blurRadius: 3)], border: Border.all(color: AppColors.whiteColor)),
+                              child: Container(
+                                width: mediaQuerySize.width.w,
+                                height: mediaQuerySize.height * 0.4.h,
+                                decoration: BoxDecoration(
+                                    boxShadow: [BoxShadow(color: AppColors.whiteColor, spreadRadius: 0.3, blurRadius: 3)],
+                                    image: DecorationImage(fit: BoxFit.cover, image: AssetImage(widget.isOffline ? ListData.midImages[index] : ListData.onlineSliderImages[index])),
+                                    borderRadius: BorderRadius.circular(12.sp)),
+                                child: Container(
+                                  width: mediaQuerySize.width.w,
+                                  height: mediaQuerySize.height * 0.4.h,
+                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(12.sp), color: AppColors.blackColor.withOpacity(0.8)),
+                                  child: Align(
+                                    alignment: Alignment.center,
+                                    child: Text(ListData.title[index], style: AppTextstyles.simpleTextStyle().copyWith(fontSize: mediaQuerySize.width * 0.07.w)),
                                   ),
-                                  Text(
-                                    poets[index],
-                                    style: const TextStyle(fontFamily: 'boldFont'),
-                                  )
-                                ],
+                                ),
                               ),
                             ),
                           );
                         },
+                        options: CarouselOptions(
+                          height: mediaQuerySize.height * 0.3.h,
+                          enlargeCenterPage: true,
+                          enableInfiniteScroll: true,
+                          initialPage: 0,
+                          autoPlay: true,
+                          autoPlayInterval: const Duration(seconds: 4),
+                          autoPlayAnimationDuration: const Duration(milliseconds: 800),
+                          scrollPhysics: const BouncingScrollPhysics(),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                  SizedBox(height: mediaQuerySize.height * 0.02.h),
-                  const Align(
-                    alignment: Alignment.centerRight,
+                ),
+                SizedBox(height: mediaQuerySize.height * 0.025.h),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: mediaQuerySize.width * 0.015.w),
                     child: Text(
-                      'مختلف زبانیں',
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      'بہترین شعراء',
+                      style: TextStyle(color: AppColors.whiteColor, fontWeight: FontWeight.bold, fontSize: 16),
                     ),
                   ),
-                  SizedBox(
-                    width: mediaQuerySize.width,
-                    child: GridView.builder(
-                      shrinkWrap: true, // This makes the GridView take only as much space as needed
-                      physics: const NeverScrollableScrollPhysics(), // Disables scrolling of the GridView
-
-                      itemCount: languageList.length,
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
-                      itemBuilder: (context, index) {
+                ),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: List.generate(
+                      ListData.poets.length,
+                      (index) {
                         return Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: EdgeInsets.symmetric(horizontal: mediaQuerySize.width * 0.018.w, vertical: mediaQuerySize.height * 0.012.h),
                           child: GestureDetector(
                             onTap: () {
                               index == 0
-                                  ? Get.to(() => PoetryScreen(
-                                        name: '',
-                                        isUrduPoetry: true,
-                                      ))
-                                  : index == 1
-                                      ? Get.to(() => PoetryScreen(
+                                  ? Get.to(
+                                      transition: Transition.fade,
+                                      duration: Duration(milliseconds: 500),
+                                      () => PoetryScreen(
+                                            isOffline: widget.isOffline,
                                             name: '',
-                                            isPunjabiPoetry: true,
+                                            isMirzaGhalibPoetry: widget.isOffline ? false : true,
+                                            isMirTakiMirPoetry: widget.isOffline ? true : false,
                                           ))
-                                      : index == 2
-                                          ? Get.to(() => PoetryScreen(
+                                  : index == 1
+                                      ? Get.to(
+                                          transition: Transition.fade,
+                                          duration: Duration(milliseconds: 500),
+                                          () => PoetryScreen(
+                                                isOffline: widget.isOffline,
                                                 name: '',
-                                                isSaraikiPoetry: true,
+                                                isShakirShujabadiPoetry: widget.isOffline ? false : true,
+                                                isHasratMohaniPoetry: widget.isOffline ? true : false,
                                               ))
-                                          : index == 3
-                                              ? Get.to(() => PoetryScreen(
+                                      : index == 2
+                                          ? Get.to(
+                                              transition: Transition.fade,
+                                              duration: Duration(milliseconds: 500),
+                                              () => PoetryScreen(
+                                                    isRafiqKhawarPoetry: widget.isOffline ? true : false,
+                                                    isOffline: widget.isOffline,
                                                     name: '',
-                                                    isSindiPoetry: true,
+                                                    isBollayShahPoetry: widget.isOffline ? false : true,
                                                   ))
-                                              : index == 4
-                                                  ? Get.to(() => PoetryScreen(
+                                          : index == 3
+                                              ? Get.to(
+                                                  transition: Transition.fade,
+                                                  duration: Duration(milliseconds: 500),
+                                                  () => PoetryScreen(
+                                                        isSeharLodhanviPoetry: widget.isOffline ? true : false,
+                                                        isOffline: widget.isOffline,
                                                         name: '',
-                                                        isPashtoPoetry: true,
+                                                        isAhmadFrazPoetry: widget.isOffline ? false : true,
                                                       ))
-                                                  : index == 5
-                                                      ? Get.to(() => PoetryScreen(
+                                              : index == 4
+                                                  ? Get.to(
+                                                      transition: Transition.fade,
+                                                      duration: Duration(milliseconds: 500),
+                                                      () => PoetryScreen(
+                                                            isJoshAbadiPoetry: widget.isOffline ? true : false,
+                                                            isOffline: widget.isOffline,
                                                             name: '',
-                                                            isBalochiPoetry: true,
+                                                            isSachalSarmastPoetry: widget.isOffline ? false : true,
                                                           ))
-                                                      : index == 6
-                                                          ? Get.to(() => PoetryScreen(
+                                                  : index == 5
+                                                      ? Get.to(
+                                                          transition: Transition.fade,
+                                                          duration: Duration(milliseconds: 500),
+                                                          () => PoetryScreen(
+                                                                isShaheedBhagatPoetry: widget.isOffline ? true : false,
+                                                                isOffline: widget.isOffline,
                                                                 name: '',
-                                                                isKashmariPoetry: true,
+                                                                isJhonEliaPoetry: widget.isOffline ? false : true,
                                                               ))
-                                                          : index == 7
-                                                              ? Get.to(() => PoetryScreen(
+                                                      : index == 6
+                                                          ? Get.to(
+                                                              transition: Transition.fade,
+                                                              duration: Duration(milliseconds: 500),
+                                                              () => PoetryScreen(
+                                                                    isAllamaIqbalPoetry: widget.isOffline ? true : false,
+                                                                    isOffline: widget.isOffline,
                                                                     name: '',
-                                                                    isFarsiPoetry: true,
+                                                                    isKhawajaFareedPoetry: widget.isOffline ? false : true,
                                                                   ))
-                                                              : '';
+                                                          : index == 7
+                                                              ? Get.to(
+                                                                  transition: Transition.fade,
+                                                                  duration: Duration(milliseconds: 500),
+                                                                  () => PoetryScreen(
+                                                                        isGorakpuriPoetry: widget.isOffline ? true : false,
+                                                                        isOffline: widget.isOffline,
+                                                                        name: '',
+                                                                        isParveenShakirPoetry: widget.isOffline ? false : true,
+                                                                      ))
+                                                              : index == 8
+                                                                  ? Get.to(
+                                                                      transition: Transition.fade,
+                                                                      duration: Duration(milliseconds: 500),
+                                                                      () => PoetryScreen(
+                                                                            isWarisShahPoetry: widget.isOffline ? true : false,
+                                                                            isOffline: widget.isOffline,
+                                                                            name: '',
+                                                                            isAmjadIslamPoetry: widget.isOffline ? false : true,
+                                                                          ))
+                                                                  : index == 9
+                                                                      ? Get.to(
+                                                                          transition: Transition.fade,
+                                                                          duration: Duration(milliseconds: 500),
+                                                                          () => PoetryScreen(
+                                                                                isRehmanBabaPoetry: true,
+                                                                                isOffline: widget.isOffline,
+                                                                                name: '',
+                                                                              ))
+                                                                      : index == 10
+                                                                          ? Get.to(
+                                                                              transition: Transition.fade,
+                                                                              duration: Duration(milliseconds: 500),
+                                                                              () => PoetryScreen(
+                                                                                    isAmjadIslamPoetry: widget.isOffline ? true : false,
+                                                                                    isOffline: widget.isOffline,
+                                                                                    name: '',
+                                                                                    isWarisShahPoetry: widget.isOffline ? false : true,
+                                                                                  ))
+                                                                          : index == 11
+                                                                              ? Get.to(
+                                                                                  transition: Transition.fade,
+                                                                                  duration: Duration(milliseconds: 500),
+                                                                                  () => PoetryScreen(
+                                                                                        isParveenShakirPoetry: widget.isOffline ? true : false,
+                                                                                        isOffline: widget.isOffline,
+                                                                                        name: '',
+                                                                                        isGorakpuriPoetry: widget.isOffline ? false : true,
+                                                                                      ))
+                                                                              : index == 12
+                                                                                  ? Get.to(
+                                                                                      transition: Transition.fade,
+                                                                                      duration: Duration(milliseconds: 500),
+                                                                                      () => PoetryScreen(
+                                                                                            isKhawajaFareedPoetry: widget.isOffline ? true : false,
+                                                                                            isOffline: widget.isOffline,
+                                                                                            name: '',
+                                                                                            isAllamaIqbalPoetry: widget.isOffline ? false : true,
+                                                                                          ))
+                                                                                  : index == 13
+                                                                                      ? Get.to(
+                                                                                          transition: Transition.fade,
+                                                                                          duration: Duration(milliseconds: 500),
+                                                                                          () => PoetryScreen(
+                                                                                                isJhonEliaPoetry: widget.isOffline ? true : false,
+                                                                                                isOffline: widget.isOffline,
+                                                                                                name: '',
+                                                                                                isShaheedBhagatPoetry: widget.isOffline ? false : true,
+                                                                                              ))
+                                                                                      : index == 14
+                                                                                          ? Get.to(
+                                                                                              transition: Transition.fade,
+                                                                                              duration: Duration(milliseconds: 500),
+                                                                                              () => PoetryScreen(
+                                                                                                    isSachalSarmastPoetry: widget.isOffline ? true : false,
+                                                                                                    isOffline: widget.isOffline,
+                                                                                                    name: '',
+                                                                                                    isJoshAbadiPoetry: widget.isOffline ? false : true,
+                                                                                                  ))
+                                                                                          : index == 15
+                                                                                              ? Get.to(
+                                                                                                  transition: Transition.fade,
+                                                                                                  duration: Duration(milliseconds: 500),
+                                                                                                  () => PoetryScreen(
+                                                                                                        isAhmadFrazPoetry: widget.isOffline ? true : false,
+                                                                                                        isOffline: widget.isOffline,
+                                                                                                        name: '',
+                                                                                                        isSeharLodhanviPoetry: widget.isOffline ? false : true,
+                                                                                                      ))
+                                                                                              : index == 16
+                                                                                                  ? Get.to(
+                                                                                                      transition: Transition.fade,
+                                                                                                      duration: Duration(milliseconds: 500),
+                                                                                                      () => PoetryScreen(
+                                                                                                            isBollayShahPoetry: widget.isOffline ? true : false,
+                                                                                                            isOffline: widget.isOffline,
+                                                                                                            name: '',
+                                                                                                            isRafiqKhawarPoetry: widget.isOffline ? false : true,
+                                                                                                          ))
+                                                                                                  : index == 17
+                                                                                                      ? Get.to(
+                                                                                                          transition: Transition.fade,
+                                                                                                          duration: Duration(milliseconds: 500),
+                                                                                                          () => PoetryScreen(
+                                                                                                                isShakirShujabadiPoetry: widget.isOffline ? true : false,
+                                                                                                                isOffline: widget.isOffline,
+                                                                                                                name: '',
+                                                                                                                isHasratMohaniPoetry: widget.isOffline ? false : true,
+                                                                                                              ))
+                                                                                                      : index == 18
+                                                                                                          ? Get.to(
+                                                                                                              transition: Transition.fade,
+                                                                                                              duration: Duration(milliseconds: 500),
+                                                                                                              () => PoetryScreen(
+                                                                                                                    isOffline: widget.isOffline,
+                                                                                                                    name: '',
+                                                                                                                    isMirTakiMirPoetry: widget.isOffline ? false : true,
+                                                                                                                  ))
+                                                                                                          : '';
                             },
-                            child: Container(
-                              decoration: BoxDecoration(image: DecorationImage(colorFilter: const ColorFilter.mode(Color.fromARGB(170, 0, 0, 0), BlendMode.colorBurn), fit: BoxFit.cover, image: AssetImage(languageFlag[index])), color: Colors.amber, borderRadius: BorderRadius.circular(10)),
-                              child: Center(
-                                  child: Text(
-                                languageList[index],
-                                style: TextStyle(fontFamily: 'boldFont', color: Colors.white, fontSize: mediaQuerySize.width * 0.06.w),
-                              )),
+                            child: Column(
+                              children: [
+                                Container(
+                                  height: mediaQuerySize.height * 0.1.h,
+                                  width: mediaQuerySize.width * 0.17.w,
+                                  decoration: BoxDecoration(image: DecorationImage(fit: BoxFit.cover, image: AssetImage(widget.isOffline ? ListData.poetImages.reversed.toList()[index] : ListData.poetImages[index])), color: AppColors.blackColor, shape: BoxShape.circle),
+                                ),
+                                Text(widget.isOffline ? ListData.poets.reversed.toList()[index] : ListData.poets[index], style: AppTextstyles.simpleTextStyle().copyWith(fontSize: 14))
+                              ],
                             ),
                           ),
                         );
                       },
                     ),
                   ),
-                ],
-              ),
+                ),
+                SizedBox(height: mediaQuerySize.height * 0.015.h),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: mediaQuerySize.width * 0.015.w),
+                    child: Text(
+                      'مختلف زبانیں',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: AppColors.whiteColor,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: mediaQuerySize.width.w,
+                  child: GridView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: ListData.languageList.length,
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            index == 0
+                                ? Get.to(
+                                    transition: Transition.fade,
+                                    duration: Duration(milliseconds: 500),
+                                    () => PoetryScreen(
+                                          isOffline: widget.isOffline,
+                                          name: '',
+                                          isUrduPoetry: true,
+                                        ))
+                                : index == 1
+                                    ? Get.to(
+                                        transition: Transition.fade,
+                                        duration: Duration(milliseconds: 500),
+                                        () => PoetryScreen(
+                                              isOffline: widget.isOffline,
+                                              name: '',
+                                              isPunjabiPoetry: true,
+                                            ))
+                                    : index == 2
+                                        ? Get.to(
+                                            transition: Transition.fade,
+                                            duration: Duration(milliseconds: 500),
+                                            () => PoetryScreen(
+                                                  isOffline: widget.isOffline,
+                                                  name: '',
+                                                  isSaraikiPoetry: true,
+                                                ))
+                                        : index == 3
+                                            ? Get.to(
+                                                transition: Transition.fade,
+                                                duration: Duration(milliseconds: 500),
+                                                () => PoetryScreen(
+                                                      isOffline: widget.isOffline,
+                                                      name: '',
+                                                      isSindiPoetry: true,
+                                                    ))
+                                            : index == 4
+                                                ? Get.to(
+                                                    transition: Transition.fade,
+                                                    duration: Duration(milliseconds: 500),
+                                                    () => PoetryScreen(
+                                                          isOffline: widget.isOffline,
+                                                          name: '',
+                                                          isPashtoPoetry: true,
+                                                        ))
+                                                : index == 5
+                                                    ? Get.to(
+                                                        transition: Transition.fade,
+                                                        duration: Duration(milliseconds: 500),
+                                                        () => PoetryScreen(
+                                                              isOffline: widget.isOffline,
+                                                              name: '',
+                                                              isBalochiPoetry: true,
+                                                            ))
+                                                    : index == 6
+                                                        ? Get.to(
+                                                            transition: Transition.fade,
+                                                            duration: Duration(milliseconds: 500),
+                                                            () => PoetryScreen(
+                                                                  isOffline: widget.isOffline,
+                                                                  name: '',
+                                                                  isKashmariPoetry: true,
+                                                                ))
+                                                        : index == 7
+                                                            ? Get.to(
+                                                                transition: Transition.fade,
+                                                                duration: Duration(milliseconds: 500),
+                                                                () => PoetryScreen(
+                                                                      isOffline: widget.isOffline,
+                                                                      name: '',
+                                                                      isFarsiPoetry: true,
+                                                                    ))
+                                                            : '';
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                                border: Border.all(color: AppColors.whiteColor.withOpacity(0.7)),
+                                boxShadow: [BoxShadow(color: AppColors.whiteColor, spreadRadius: 0.3, blurRadius: 3)],
+                                image: DecorationImage(opacity: widget.isOffline ? 1 : 0.7, colorFilter: const ColorFilter.mode(Color.fromARGB(170, 0, 0, 0), BlendMode.colorBurn), fit: BoxFit.cover, image: AssetImage(ListData.languageFlag[index])),
+                                color: AppColors.blackColor,
+                                borderRadius: BorderRadius.circular(10.sp)),
+                            child: Center(
+                                child: Text(
+                              ListData.languageList[index],
+                              style: AppTextstyles.simpleTextStyle().copyWith(fontSize: mediaQuerySize.width * 0.06.w),
+                            )),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
           ),
         ),
