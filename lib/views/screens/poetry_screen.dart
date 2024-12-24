@@ -295,240 +295,239 @@ class _PoetryScreenState extends State<PoetryScreen> {
     }
 
     Size mediaQuerySize = MediaQuery.of(context).size;
-    return Obx(() {
-      return SafeArea(
-          child: Scaffold(
-              body: widget.isFavorite
-                  ? Container(
-                      height: mediaQuerySize.height.h,
-                      width: mediaQuerySize.width.w,
-                      decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [AppColors.lightBlueColor, AppColors.dartBlue],
-                      )),
-                      child: Column(children: [
-                        CommonWidgets.commonAppBar(mediaQuerySize, 'پسندیدہ شاعری'),
-                        Expanded(
-                            child: ListView.builder(
-                          itemCount: poetryController.data.length,
-                          itemBuilder: (context, index) {
-                            return CommonWidgets().commonContainer(Poetrytext: poetryController.data[index], actionData: poetryController.data[index], mediaQuerySize: mediaQuerySize, likeOnTap: () {}, likeLength: '', likes: false, favoriteColor: AppColors.amberColor, isFavorite: false);
-                          },
-                        ))
-                      ]),
-                    )
-                  : widget.isOffline
-                      ? Container(
-                          height: mediaQuerySize.height,
-                          width: mediaQuerySize.width,
-                          decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [AppColors.lightBlueColor, AppColors.dartBlue],
-                          )),
-                          child: Column(
+    return SafeArea(
+        child: Scaffold(
+      body: widget.isFavorite
+          ? Container(
+              height: mediaQuerySize.height.h,
+              width: mediaQuerySize.width.w,
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [AppColors.lightBlueColor, AppColors.dartBlue],
+              )),
+              child: Column(children: [
+                CommonWidgets.commonAppBar(mediaQuerySize, 'پسندیدہ شاعری'),
+                Expanded(
+                    child: ListView.builder(
+                  itemCount: poetryController.data.length,
+                  itemBuilder: (context, index) {
+                    return CommonWidgets().commonContainer(Poetrytext: poetryController.data[index], actionData: poetryController.data[index], mediaQuerySize: mediaQuerySize, likeOnTap: () {}, likeLength: '', likes: false, favoriteColor: AppColors.amberColor, isFavorite: false);
+                  },
+                ))
+              ]),
+            )
+          : widget.isOffline
+              ? Container(
+                  height: mediaQuerySize.height,
+                  width: mediaQuerySize.width,
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [AppColors.lightBlueColor, AppColors.dartBlue],
+                  )),
+                  child: Column(
+                    children: [
+                      CommonWidgets.commonAppBar(mediaQuerySize, appBarText()),
+                      Expanded(
+                          child: ListView.builder(
+                        itemCount: valueLength(),
+                        itemBuilder: (context, index) {
+                          return Obx(() {
+                            return CommonWidgets().commonContainer(
+                                Poetrytext: listText(index),
+                                actionData: listText(index),
+                                mediaQuerySize: mediaQuerySize,
+                                likeOnTap: () {
+                                  isLikedOffline[index] = !isLikedOffline[index];
+
+                                  if (isLikedOffline[index]) {
+                                    poetryController.data.add(listText(index));
+                                  } else {
+                                    poetryController.data.remove(listText(index));
+                                  }
+                                  MySharedPreferences.setStringList('myList', poetryController.data);
+                                  poetryController.data.value = MySharedPreferences.getStringList('myList');
+                                },
+                                likeLength: '',
+                                likes: true,
+                                favoriteColor: isLikedOffline[index] ? AppColors.redColor : AppColors.whiteColor,
+                                isFavorite: true);
+                          });
+                        },
+                      ))
+                    ],
+                  ),
+                )
+              : Container(
+                  height: mediaQuerySize.height,
+                  width: mediaQuerySize.width,
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [AppColors.lightBlueColor, AppColors.dartBlue],
+                  )),
+                  child: StreamBuilder<QuerySnapshot>(
+                      stream: FirebaseFirestore.instance
+                          .collection('poetry')
+                          .doc('zhQPUkItQTy12bEEfdRQ')
+                          .collection(widget.isPunjabiPoetry
+                              ? 'punjabiPoetry'
+                              : widget.isUrduPoetry
+                                  ? "urduPoetry"
+                                  : widget.isSaraikiPoetry
+                                      ? "saraikiPoetry"
+                                      : widget.isSindiPoetry
+                                          ? "sindhiPoetry"
+                                          : widget.isPashtoPoetry
+                                              ? "pashtoPoetry"
+                                              : widget.isBalochiPoetry
+                                                  ? "balochiPoetry"
+                                                  : widget.isKashmariPoetry
+                                                      ? "KashmiriPoetry"
+                                                      : widget.isFarsiPoetry
+                                                          ? "farsiPoetry"
+                                                          : widget.isSadPoetry
+                                                              ? "sadPoetry"
+                                                              : widget.isFarsiPoetry
+                                                                  ? "farsiPoetry"
+                                                                  : widget.isMirzaGhalibPoetry
+                                                                      ? "mirzaGhalib"
+                                                                      : widget.isShakirShujabadiPoetry
+                                                                          ? "shakirShujabadi"
+                                                                          : widget.isBollayShahPoetry
+                                                                              ? "bullayShah"
+                                                                              : widget.isAhmadFrazPoetry
+                                                                                  ? "ahmadFraz"
+                                                                                  : widget.isSachalSarmastPoetry
+                                                                                      ? "sachalSarmast"
+                                                                                      : widget.isJhonEliaPoetry
+                                                                                          ? "jhonElia"
+                                                                                          : widget.isKhawajaFareedPoetry
+                                                                                              ? "khawjaFareed"
+                                                                                              : widget.isParveenShakirPoetry
+                                                                                                  ? "parveenShakir"
+                                                                                                  : widget.isAmjadIslamPoetry
+                                                                                                      ? "amjadIslam"
+                                                                                                      : widget.isRehmanBabaPoetry
+                                                                                                          ? "rehmanBaba"
+                                                                                                          : widget.isWarisShahPoetry
+                                                                                                              ? "warisShah"
+                                                                                                              : widget.isGorakpuriPoetry
+                                                                                                                  ? "fraqGorakPuri"
+                                                                                                                  : widget.isAllamaIqbalPoetry
+                                                                                                                      ? "allamaIqbal"
+                                                                                                                      : widget.isShaheedBhagatPoetry
+                                                                                                                          ? "shaheedBhagat"
+                                                                                                                          : widget.isJoshAbadiPoetry
+                                                                                                                              ? "joshMilheAbadi"
+                                                                                                                              : widget.isSeharLodhanviPoetry
+                                                                                                                                  ? "sahirLodhanvi"
+                                                                                                                                  : widget.isRafiqKhawarPoetry
+                                                                                                                                      ? "rafiqKhawar"
+                                                                                                                                      : widget.isHasratMohaniPoetry
+                                                                                                                                          ? "hasratMohanvi"
+                                                                                                                                          : widget.isMirTakiMirPoetry
+                                                                                                                                              ? "mirTakiMir"
+                                                                                                                                              : widget.isSadPoetry
+                                                                                                                                                  ? "sadPoetry"
+                                                                                                                                                  : widget.isLovePoetry
+                                                                                                                                                      ? "lovePoetry"
+                                                                                                                                                      : widget.isFunnyPoetry
+                                                                                                                                                          ? "funnyPoetry"
+                                                                                                                                                          : '') // Sub-collection name
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return Column(
                             children: [
                               CommonWidgets.commonAppBar(mediaQuerySize, appBarText()),
                               Expanded(
-                                  child: ListView.builder(
-                                itemCount: valueLength(),
+                                child: CommonWidgets.commonShimmer(ListView.builder(
+                                  itemCount: 10,
+                                  itemBuilder: (context, index) {
+                                    return CommonWidgets().commonContainer(Poetrytext: '', actionData: '', mediaQuerySize: mediaQuerySize, likeOnTap: () {}, likeLength: '', likes: false, favoriteColor: AppColors.redColor, isFavorite: false);
+                                  },
+                                )),
+                              )
+                            ],
+                          );
+                        }
+
+                        if (snapshot.hasError) {
+                          return Center(child: Text('Error: ${snapshot.error}'));
+                        }
+
+                        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                          return Center(
+                              child: Text(
+                            'No Data',
+                            style: AppTextstyles.simpleTextStyle(),
+                          ));
+                        }
+
+                        for (var i = 0; i < snapshot.data!.docs.length; i++) {
+                          String poetryText = snapshot.data!.docs[i]['text'];
+                          bool isFavorite = poetryController.data.contains(poetryText);
+                          poetryList.add(PoetryModel(text: poetryText, isFavorite: isFavorite));
+                          isLiked[i] = isFavorite;
+
+                          print(isFavorite);
+                        }
+
+                        return Column(
+                          children: [
+                            CommonWidgets.commonAppBar(mediaQuerySize, appBarText()),
+                            Expanded(
+                              child: ListView.builder(
+                                itemCount: snapshot.data!.docs.length,
                                 itemBuilder: (context, index) {
+                                  firebasePoetry.value = snapshot.data!.docs;
+                                  var snapshotData = snapshot.data!.docs[index];
+
                                   return Obx(() {
                                     return CommonWidgets().commonContainer(
-                                        Poetrytext: listText(index),
-                                        actionData: listText(index),
+                                        Poetrytext: snapshotData['text'],
+                                        actionData: snapshotData['text'],
                                         mediaQuerySize: mediaQuerySize,
                                         likeOnTap: () {
-                                          isLikedOffline[index] = !isLikedOffline[index];
-
-                                          if (isLikedOffline[index]) {
-                                            poetryController.data.add(listText(index));
+                                          isLiked[index] = !isLiked[index];
+                                          poetryList[index].isFavorite = !poetryList[index].isFavorite;
+                                          if (poetryList[index].isFavorite) {
+                                            poetryController.data.add(poetryList[index].text);
                                           } else {
-                                            poetryController.data.remove(listText(index));
+                                            poetryController.data.remove(poetryList[index].text);
                                           }
                                           MySharedPreferences.setStringList('myList', poetryController.data);
                                           poetryController.data.value = MySharedPreferences.getStringList('myList');
                                         },
                                         likeLength: '',
-                                        likes: true,
-                                        favoriteColor: isLikedOffline[index] ? AppColors.redColor : AppColors.whiteColor,
+                                        likes: false,
+                                        favoriteColor: isLiked[index] ? AppColors.redColor : AppColors.whiteColor,
                                         isFavorite: true);
                                   });
                                 },
-                              ))
-                            ],
-                          ),
-                        )
-                      : Container(
-                          height: mediaQuerySize.height,
-                          width: mediaQuerySize.width,
-                          decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [AppColors.lightBlueColor, AppColors.dartBlue],
-                          )),
-                          child: StreamBuilder<QuerySnapshot>(
-                              stream: FirebaseFirestore.instance
-                                  .collection('poetry')
-                                  .doc('zhQPUkItQTy12bEEfdRQ')
-                                  .collection(widget.isPunjabiPoetry
-                                      ? 'punjabiPoetry'
-                                      : widget.isUrduPoetry
-                                          ? "urduPoetry"
-                                          : widget.isSaraikiPoetry
-                                              ? "saraikiPoetry"
-                                              : widget.isSindiPoetry
-                                                  ? "sindhiPoetry"
-                                                  : widget.isPashtoPoetry
-                                                      ? "pashtoPoetry"
-                                                      : widget.isBalochiPoetry
-                                                          ? "balochiPoetry"
-                                                          : widget.isKashmariPoetry
-                                                              ? "KashmiriPoetry"
-                                                              : widget.isFarsiPoetry
-                                                                  ? "farsiPoetry"
-                                                                  : widget.isSadPoetry
-                                                                      ? "sadPoetry"
-                                                                      : widget.isFarsiPoetry
-                                                                          ? "farsiPoetry"
-                                                                          : widget.isMirzaGhalibPoetry
-                                                                              ? "mirzaGhalib"
-                                                                              : widget.isShakirShujabadiPoetry
-                                                                                  ? "shakirShujabadi"
-                                                                                  : widget.isBollayShahPoetry
-                                                                                      ? "bullayShah"
-                                                                                      : widget.isAhmadFrazPoetry
-                                                                                          ? "ahmadFraz"
-                                                                                          : widget.isSachalSarmastPoetry
-                                                                                              ? "sachalSarmast"
-                                                                                              : widget.isJhonEliaPoetry
-                                                                                                  ? "jhonElia"
-                                                                                                  : widget.isKhawajaFareedPoetry
-                                                                                                      ? "khawjaFareed"
-                                                                                                      : widget.isParveenShakirPoetry
-                                                                                                          ? "parveenShakir"
-                                                                                                          : widget.isAmjadIslamPoetry
-                                                                                                              ? "amjadIslam"
-                                                                                                              : widget.isRehmanBabaPoetry
-                                                                                                                  ? "rehmanBaba"
-                                                                                                                  : widget.isWarisShahPoetry
-                                                                                                                      ? "warisShah"
-                                                                                                                      : widget.isGorakpuriPoetry
-                                                                                                                          ? "fraqGorakPuri"
-                                                                                                                          : widget.isAllamaIqbalPoetry
-                                                                                                                              ? "allamaIqbal"
-                                                                                                                              : widget.isShaheedBhagatPoetry
-                                                                                                                                  ? "shaheedBhagat"
-                                                                                                                                  : widget.isJoshAbadiPoetry
-                                                                                                                                      ? "joshMilheAbadi"
-                                                                                                                                      : widget.isSeharLodhanviPoetry
-                                                                                                                                          ? "sahirLodhanvi"
-                                                                                                                                          : widget.isRafiqKhawarPoetry
-                                                                                                                                              ? "rafiqKhawar"
-                                                                                                                                              : widget.isHasratMohaniPoetry
-                                                                                                                                                  ? "hasratMohanvi"
-                                                                                                                                                  : widget.isMirTakiMirPoetry
-                                                                                                                                                      ? "mirTakiMir"
-                                                                                                                                                      : widget.isSadPoetry
-                                                                                                                                                          ? "sadPoetry"
-                                                                                                                                                          : widget.isLovePoetry
-                                                                                                                                                              ? "lovePoetry"
-                                                                                                                                                              : widget.isFunnyPoetry
-                                                                                                                                                                  ? "funnyPoetry"
-                                                                                                                                                                  : '') // Sub-collection name
-                                  .snapshots(),
-                              builder: (context, snapshot) {
-                                if (snapshot.connectionState == ConnectionState.waiting) {
-                                  return Column(
-                                    children: [
-                                      CommonWidgets.commonAppBar(mediaQuerySize, appBarText()),
-                                      Expanded(
-                                        child: CommonWidgets.commonShimmer(ListView.builder(
-                                          itemCount: 10,
-                                          itemBuilder: (context, index) {
-                                            return CommonWidgets().commonContainer(Poetrytext: '', actionData: '', mediaQuerySize: mediaQuerySize, likeOnTap: () {}, likeLength: '', likes: false, favoriteColor: AppColors.redColor, isFavorite: false);
-                                          },
-                                        )),
-                                      )
-                                    ],
-                                  );
-                                }
-
-                                if (snapshot.hasError) {
-                                  return Center(child: Text('Error: ${snapshot.error}'));
-                                }
-
-                                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                                  return Center(
-                                      child: Text(
-                                    'No Data',
-                                    style: AppTextstyles.simpleTextStyle(),
-                                  ));
-                                }
-
-                                for (var i = 0; i < snapshot.data!.docs.length; i++) {
-                                  String poetryText = snapshot.data!.docs[i]['text'];
-                                  bool isFavorite = poetryController.data.contains(poetryText);
-                                  poetryList.add(PoetryModel(text: poetryText, isFavorite: isFavorite));
-                                  isLiked[i] = isFavorite;
-
-                                  print(isFavorite);
-                                }
-
-                                return Column(
-                                  children: [
-                                    CommonWidgets.commonAppBar(mediaQuerySize, appBarText()),
-                                    Expanded(
-                                      child: ListView.builder(
-                                        itemCount: snapshot.data!.docs.length,
-                                        itemBuilder: (context, index) {
-                                          firebasePoetry.value = snapshot.data!.docs;
-                                          var snapshotData = snapshot.data!.docs[index];
-
-                                          return Obx(() {
-                                            return CommonWidgets().commonContainer(
-                                                Poetrytext: snapshotData['text'],
-                                                actionData: snapshotData['text'],
-                                                mediaQuerySize: mediaQuerySize,
-                                                likeOnTap: () {
-                                                  isLiked[index] = !isLiked[index];
-                                                  poetryList[index].isFavorite = !poetryList[index].isFavorite;
-                                                  if (poetryList[index].isFavorite) {
-                                                    poetryController.data.add(poetryList[index].text);
-                                                  } else {
-                                                    poetryController.data.remove(poetryList[index].text);
-                                                  }
-                                                  MySharedPreferences.setStringList('myList', poetryController.data);
-                                                  poetryController.data.value = MySharedPreferences.getStringList('myList');
-                                                },
-                                                likeLength: '',
-                                                likes: false,
-                                                favoriteColor: isLiked[index] ? AppColors.redColor : AppColors.whiteColor,
-                                                isFavorite: true);
-                                          });
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              }),
-                        ),
-              bottomNavigationBar: widget.isOffline
-                  ? SizedBox()
-                  : widget.isFavorite
-                      ? SizedBox()
-                      : _isAdLoaded.value
-                          ? SizedBox(
-                              height: _bannerAd.size.height.toDouble(),
-                              width: _bannerAd.size.width.toDouble(),
-                              child: AdWidget(ad: _bannerAd),
-                            )
-                          : SizedBox()));
-    });
+                              ),
+                            ),
+                          ],
+                        );
+                      }),
+                ),
+      // bottomNavigationBar: widget.isOffline
+      //     ? SizedBox()
+      //     : widget.isFavorite
+      //         ? SizedBox()
+      //         : _isAdLoaded.value
+      //             ? SizedBox(
+      //                 height: _bannerAd.size.height.toDouble(),
+      //                 width: _bannerAd.size.width.toDouble(),
+      //                 child: AdWidget(ad: _bannerAd),
+      //               )
+      //             : SizedBox()
+    ));
   }
 
   String appBarText() {
