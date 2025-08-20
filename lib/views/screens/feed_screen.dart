@@ -240,7 +240,7 @@ class _FeedScreenState extends State<FeedScreen> {
                         child: ListView.builder(
                       itemCount: snapshot.data?.docs.length,
                       itemBuilder: (context, index) {
-                        DateTime parsedTime = DateTime.parse(snapshot.data!.docs[index]['time']);
+                        DateTime parsedTime = DateTime.parse(snapshot.data?.docs[index]['time']);
                         String timeAgo = timeago.format(parsedTime);
 
                         return Row(
@@ -258,13 +258,13 @@ class _FeedScreenState extends State<FeedScreen> {
                                     height: mediaQuerySize.height * 0.055.h,
                                     width: mediaQuerySize.width * 0.13.w,
                                     decoration: BoxDecoration(
-                                        color: snapshot.data!.docs[index]['name'][0].toString().toLowerCase().contains(RegExp(r'[a-f]'))
+                                        color: snapshot.data?.docs[index]['name'][0].toString().toLowerCase().contains(RegExp(r'[a-f]')) ?? false
                                             ? AppColors.firstContainerColor
-                                            : snapshot.data!.docs[index]['name'][0].toString().toLowerCase().contains(RegExp(r'[g-j]'))
+                                            : snapshot.data?.docs[index]['name'][0].toString().toLowerCase().contains(RegExp(r'[g-j]')) ?? false
                                                 ? AppColors.darkGreen
-                                                : snapshot.data!.docs[index]['name'][0].toString().toLowerCase().contains(RegExp(r'[k-p]'))
+                                                : snapshot.data?.docs[index]['name'][0].toString().toLowerCase().contains(RegExp(r'[k-p]')) ?? false
                                                     ? AppColors.dartGrey
-                                                    : snapshot.data!.docs[index]['name'][0].toString().toLowerCase().contains(RegExp(r'[q-v]'))
+                                                    : snapshot.data?.docs[index]['name'][0].toString().toLowerCase().contains(RegExp(r'[q-v]')) ?? false
                                                         ? AppColors.purpleColor
                                                         : AppColors.darkRed,
                                         shape: BoxShape.circle),
@@ -320,24 +320,24 @@ class _FeedScreenState extends State<FeedScreen> {
                                               mediaQuerySize: mediaQuerySize,
                                               actionText: snapshot.data?.docs[index]['text'],
                                               likeOnTap: () async {
-                                                if (snapshot.data!.docs[index]['Likes'].toString().toLowerCase().contains(deviceId.value.toLowerCase())) {
-                                                  await FirebaseFirestore.instance.collection('feedsPoetry').doc(snapshot.data!.docs[index].id).update({
+                                                if (snapshot.data?.docs[index]['Likes'].toString().toLowerCase().contains(deviceId.value.toLowerCase()) ?? false) {
+                                                  await FirebaseFirestore.instance.collection('feedsPoetry').doc(snapshot.data?.docs[index].id).update({
                                                     'Likes': FieldValue.arrayRemove([deviceId.value]),
                                                   });
-                                                  poetryController.data.remove(snapshot.data!.docs[index]['text']);
+                                                  poetryController.data.remove(snapshot.data?.docs[index]['text']);
                                                   MySharedPreferences.setStringList('myList', poetryController.data);
                                                 } else {
-                                                  await FirebaseFirestore.instance.collection('feedsPoetry').doc(snapshot.data!.docs[index].id).update({
+                                                  await FirebaseFirestore.instance.collection('feedsPoetry').doc(snapshot.data?.docs[index].id).update({
                                                     'Likes': FieldValue.arrayUnion([deviceId.value]), //
                                                   });
-                                                  poetryController.data.add(snapshot.data!.docs[index]['text']);
+                                                  poetryController.data.add(snapshot.data?.docs[index]['text']);
                                                   MySharedPreferences.setStringList('myList', poetryController.data);
                                                 }
                                               },
-                                              likeLength: snapshot.data!.docs[index]['Likes'].length.toString(),
+                                              likeLength: snapshot.data?.docs[index]['Likes'].length.toString() ?? '',
                                               isFavorite: true,
                                               likes: true,
-                                              favoriteColor: snapshot.data!.docs[index]['Likes'].toString().toLowerCase().contains(deviceId.value.toLowerCase()) ? AppColors.redColor : AppColors.whiteColor,
+                                              favoriteColor: snapshot.data?.docs[index]['Likes'].toString().toLowerCase().contains(deviceId.value.toLowerCase()) ?? false ? AppColors.redColor : AppColors.whiteColor,
                                             )),
                                       )
                                     ],

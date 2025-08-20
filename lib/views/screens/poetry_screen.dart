@@ -469,8 +469,8 @@ class _PoetryScreenState extends State<PoetryScreen> {
                           ));
                         }
 
-                        for (var i = 0; i < snapshot.data!.docs.length; i++) {
-                          String poetryText = snapshot.data!.docs[i]['text'];
+                        for (var i = 0; i < (snapshot.data?.docs.length ?? 0); i++) {
+                          String poetryText = snapshot.data?.docs[i]['text'];
                           bool isFavorite = poetryController.data.contains(poetryText);
                           poetryList.add(PoetryModel(text: poetryText, isFavorite: isFavorite));
                           isLiked[i] = isFavorite;
@@ -483,15 +483,15 @@ class _PoetryScreenState extends State<PoetryScreen> {
                             CommonWidgets.commonAppBar(mediaQuerySize, appBarText()),
                             Expanded(
                               child: ListView.builder(
-                                itemCount: snapshot.data!.docs.length,
+                                itemCount: snapshot.data?.docs.length,
                                 itemBuilder: (context, index) {
-                                  firebasePoetry.value = snapshot.data!.docs;
-                                  var snapshotData = snapshot.data!.docs[index];
+                                  firebasePoetry.value = snapshot.data?.docs ?? [];
+                                  var snapshotData = snapshot.data?.docs[index];
 
                                   return Obx(() {
                                     return CommonWidgets().commonContainer(
-                                        Poetrytext: snapshotData['text'],
-                                        actionData: snapshotData['text'],
+                                        Poetrytext: snapshotData?['text'],
+                                        actionData: snapshotData?['text'],
                                         mediaQuerySize: mediaQuerySize,
                                         likeOnTap: () {
                                           isLiked[index] = !isLiked[index];

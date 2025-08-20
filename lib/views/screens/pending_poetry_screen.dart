@@ -107,9 +107,9 @@ class _PendingPoetryScreenState extends State<PendingPoetryScreen> {
                             CommonWidgets.commonAppBar(mediaQuerySize, 'Pending Poetry'),
                             Expanded(
                               child: ListView.builder(
-                                itemCount: snapshot.data!.docs.length,
+                                itemCount: snapshot.data?.docs.length,
                                 itemBuilder: (context, index) {
-                                  DateTime parsedTime = DateTime.parse(snapshot.data!.docs[index]['time']);
+                                  DateTime parsedTime = DateTime.parse(snapshot.data?.docs[index]['time']);
 
                                   String timeAgo = timeago.format(parsedTime);
                                   return Padding(
@@ -122,7 +122,7 @@ class _PendingPoetryScreenState extends State<PendingPoetryScreen> {
                                           children: [
                                             Padding(
                                               padding: EdgeInsets.symmetric(horizontal: mediaQuerySize.width * 0.12.w, vertical: mediaQuerySize.height * 0.01.h),
-                                              child: Text(snapshot.data!.docs[index]['text'], style: AppTextstyles.poetryTextStyle()),
+                                              child: Text(snapshot.data?.docs[index]['text'], style: AppTextstyles.poetryTextStyle()),
                                             ),
                                             Padding(
                                               padding: EdgeInsets.symmetric(horizontal: mediaQuerySize.width * 0.025.w, vertical: mediaQuerySize.height * 0.012.h),
